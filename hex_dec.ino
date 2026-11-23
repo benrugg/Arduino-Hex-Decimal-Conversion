@@ -5,23 +5,35 @@
 //       For larger/longer values, change "unsigned int" to "long" in both places.
 
 
-unsigned int hexToDec(String hexString) {
-  
-  unsigned int decValue = 0;
-  int nextInt;
-  
-  for (int i = 0; i < hexString.length(); i++) {
-    
-    nextInt = int(hexString.charAt(i));
-    if (nextInt >= 48 && nextInt <= 57) nextInt = map(nextInt, 48, 57, 0, 9);
-    if (nextInt >= 65 && nextInt <= 70) nextInt = map(nextInt, 65, 70, 10, 15);
-    if (nextInt >= 97 && nextInt <= 102) nextInt = map(nextInt, 97, 102, 10, 15);
-    nextInt = constrain(nextInt, 0, 15);
-    
-    decValue = (decValue * 16) + nextInt;
-  }
-  
-  return decValue;
+bool hexToDec(String hexString, unsigned int &decValue) {
+    decValue = 0;
+
+    if (hexString.length() == 0 || hexString.length() > 4) {
+        return false;
+    }
+
+    for (int i = 0; i < hexString.length(); i++) {
+        char c = hexString.charAt(i);
+        int value;
+
+        if (c >= '0' && c <= '9') {
+            value = c - '0';
+        }
+        else if (c >= 'A' && c <= 'F') {
+            value = c - 'A' + 10;
+        }
+        else if (c >= 'a' && c <= 'f') {
+            value = c - 'a' + 10;
+        }
+        else {
+            decValue = 0;
+            return false;
+        }
+
+        decValue = decValue * 16 + value;
+    }
+
+    return true;
 }
 
 
